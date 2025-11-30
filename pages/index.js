@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const activeGame = getActiveGameForPlayer(user.username) || null;
+  const activeGame = (await getActiveGameForPlayer(user.username)) || null;
 
   return {
     props: {

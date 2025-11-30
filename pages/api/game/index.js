@@ -2,7 +2,7 @@
 import { getSessionUser } from '../../../lib/auth';
 import { createGame, getActiveGameForPlayer } from '../../../lib/gameService';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const user = getSessionUser(req);
 
   if (!user) {
@@ -13,7 +13,7 @@ export default function handler(req, res) {
     const { preferredColor } = req.body || {};
 
     // only allow 1 active game per player
-    const existing = getActiveGameForPlayer(user.username);
+    const existing = await getActiveGameForPlayer(user.username);
     if (existing) {
       return res
         .status(400)
@@ -25,7 +25,7 @@ export default function handler(req, res) {
         ? preferredColor
         : 'white';
 
-    const game = createGame(user.username, color);
+    const game = await createGame(user.username, color);
     return res.status(201).json({ game });
   }
 

@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   }
 
   const gameId = params.id;
-  const game = getGameById(gameId);
+  const game = await getGameById(gameId);
 
   if (!game) {
     return {
