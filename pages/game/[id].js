@@ -7,46 +7,57 @@ import { getSessionUser } from '../../lib/auth';
 import { getGameById } from '../../lib/gameService';
 
 export async function getServerSideProps(context) {
-  const { req, params } = context;
-  const user = getSessionUser(req);
+  try {
+    const { req, params } = context;
+    const user = getSessionUser(req);
 
-  if (!user) {
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+
+    const gameId = params.id;
+    console.log('[Game Page] Loading game:', gameId);
+
+    const game = await getGameById(gameId);
+    console.log('[Game Page] Game found:', !!game);
+
+    if (!game) {
+      console.error('[Game Page] Game not found in database:', gameId);
+      return {
+        notFound: true,
+      };
+    }
+
+    const isWhite = game.whitePlayer === user.username;
+    const isBlack = game.blackPlayer === user.username;
+
+    if (!isWhite && !isBlack) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
+
     return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
+      props: {
+        user,
+        serverGame: game,
+        myColor: isWhite ? 'white' : 'black',
       },
     };
-  }
-
-  const gameId = params.id;
-  const game = await getGameById(gameId);
-
-  if (!game) {
+  } catch (error) {
+    console.error('[Game Page] Error loading game:', error);
     return {
       notFound: true,
     };
   }
-
-  const isWhite = game.whitePlayer === user.username;
-  const isBlack = game.blackPlayer === user.username;
-
-  if (!isWhite && !isBlack) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      user,
-      serverGame: game,
-      myColor: isWhite ? 'white' : 'black',
-    },
-  };
 }
 
 export default function GamePage({ user, serverGame, myColor }) {
