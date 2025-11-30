@@ -2,7 +2,7 @@
 import { getSessionUser } from '../../../../lib/auth';
 import { getGameById, makeMove } from '../../../../lib/gameService';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res
@@ -56,7 +56,7 @@ export default function handler(req, res) {
   }
 
   try {
-    const updated = makeMove(id, from, to);
+    const updated = await makeMove(id, from, to);
 
     if (!updated) {
       return res

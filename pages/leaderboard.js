@@ -18,8 +18,8 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const stats = getPlayerStats();
-  const recentGames = getRecentGames(5);
+  const stats = await getPlayerStats();
+  const recentGames = await getRecentGames(5);
 
   return {
     props: {

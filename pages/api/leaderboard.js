@@ -1,7 +1,7 @@
 import { getSessionUser } from '../../lib/auth';
 import { getLeaderboard } from '../../lib/gameService';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const user = getSessionUser(req);
   if (!user) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -12,6 +12,6 @@ export default function handler(req, res) {
     return res.status(405).end('Method Not Allowed');
   }
 
-  const data = getLeaderboard();
+  const data = await getLeaderboard();
   return res.status(200).json(data);
 }
