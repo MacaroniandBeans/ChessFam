@@ -1,6 +1,12 @@
 // pages/api/game/index.js
 import { getSessionUser } from '../../../lib/auth';
-import { createGame, getActiveGameForPlayer } from '../../../lib/gameService';
+import {
+  createGame,
+  getActiveGameForPlayer,
+  getPlayerStats,
+  getRecentGames,
+} from '../../../lib/gameService';
+
 
 export default function handler(req, res) {
   const user = getSessionUser(req);
