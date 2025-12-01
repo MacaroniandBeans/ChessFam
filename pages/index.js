@@ -60,7 +60,9 @@ export default function HomePage({ user, activeGame }) {
     }
 
     const data = await res.json();
-    window.location.href = `/game/${data.game.id}`;
+    // We don’t care about the ID anymore; just go to the single game page
+    window.location.href = `/game`;
+
   }
 
   async function logout() {
