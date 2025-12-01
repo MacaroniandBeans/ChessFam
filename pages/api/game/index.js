@@ -3,12 +3,9 @@ import { getSessionUser } from '../../../lib/auth';
 import {
   createGame,
   getActiveGameForPlayer,
-  getPlayerStats,
-  getRecentGames,
 } from '../../../lib/gameService';
 
-
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const user = getSessionUser(req);
 
   if (!user) {
@@ -16,22 +13,21 @@ export default function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { preferredColor } = req.body || {};
+    const { color } = req.body || {};
 
     // only allow 1 active game per player
-    const existing = getActiveGameForPlayer(user.username);
+    const existing = await getActiveGameForPlayer(user.username);
     if (existing) {
-      return res
-        .status(400)
-        .json({ error: 'Game already in progress', gameId: existing.id });
+      return res.status(400).json({
+        error: 'Game already in progress',
+        gameId: existing.id,
+      });
     }
 
-    const color =
-      preferredColor === 'black' || preferredColor === 'white'
-        ? preferredColor
-        : 'white';
+    const normalizedColor =
+      color === 'black' || color === 'white' ? color : 'white';
 
-    const game = createGame(user.username, color);
+    const game = await createGame(user.username, normalizedColor);
     return res.status(201).json({ game });
   }
 

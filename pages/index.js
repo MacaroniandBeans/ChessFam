@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const activeGame = getActiveGameForPlayer(user.username) || null;
+  const activeGame = (await getActiveGameForPlayer(user.username)) || null;
 
   return {
     props: {
@@ -25,6 +25,7 @@ export async function getServerSideProps(context) {
     },
   };
 }
+
 
 export default function HomePage({ user, activeGame }) {
   const hasActive = !!activeGame;
@@ -238,19 +239,6 @@ export default function HomePage({ user, activeGame }) {
             No game in progress. Start one above.
           </div>
         )}
-      </section>
-
-      <section style={{ marginTop: 'auto' }}>
-        <Link
-          href="/leaderboard"
-          style={{
-            fontSize: 13,
-            color: '#38bdf8',
-            textDecoration: 'none',
-          }}
-        >
-          View leaderboard →
-        </Link>
       </section>
     </div>
   );
