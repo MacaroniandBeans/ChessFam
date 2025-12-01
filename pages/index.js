@@ -217,7 +217,7 @@ export default function HomePage({ user, activeGame }) {
             </div>
             <button
               onClick={() =>
-                (window.location.href = `/game/${activeGame.id}`)
+                (window.location.href = `/game`)
               }
               style={{
                 marginTop: 6,
