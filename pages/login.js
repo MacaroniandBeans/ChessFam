@@ -11,8 +11,8 @@ const PRESETS = {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState(PRESETS.grandpa.username);
-  const [password, setPassword] = useState(PRESETS.grandpa.password);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [selected, setSelected] = useState('grandpa'); // 'grandpa' | 'jackson'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
